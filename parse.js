@@ -9,26 +9,6 @@ fs.readFile("input.html", "utf8", function(err, data){
     });
 });
 
-var selfClose = [
-    'area',
-    'base',
-    'br',
-    'col',
-    'embed',
-    'hr',
-    'img',
-    'input',
-    'link',
-    'meta',
-    'param',
-    'source',
-    'track',
-    'wbr'
-]
-
-var stack = [];
-var out = [];
-
 function read(err, data){
     if (err) throw err;
 
