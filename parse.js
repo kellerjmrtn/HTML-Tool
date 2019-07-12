@@ -1,6 +1,13 @@
 var fs = require("fs");
 
-fs.readFile("input.html", "utf8", read);
+var out;
+fs.readFile("input.html", "utf8", function(err, data){
+    out = read(err, data);
+    
+    fs.writeFile("out.html", out, function(err){
+        console.log("write success!");
+    });
+});
 
 var selfClose = [
     'area',
@@ -10,6 +17,7 @@ var selfClose = [
     'embed',
     'hr',
     'img',
+    'input',
     'link',
     'meta',
     'param',
@@ -24,11 +32,22 @@ var out = [];
 function read(err, data){
     if (err) throw err;
 
+    var lexerData = htmlLexer(data);
+    var tabData = insertTabs(lexerData);
+
+    return tabData.join("\n");
+}
+
+function htmlLexer(data){
     data = data.replace(/(\r)|(\n)/g,"").replace(/<!--.*?-->/g,"");
+    var dataCopy = data;
+    
+    var tags = [];
 
     var element;
     var elementOpen;
-    var elementClose; 
+    var elementClose;
+    var taglen;
 
     while(true){
         elementOpen = data.match(/<[^/][^<>]*>/);
@@ -47,71 +66,55 @@ function read(err, data){
             }
         }
         
-        stack.push(element);
+        tags.push(element);
+
+        taglen = tags.length;
+        if(taglen > 1){
+            text = getTextBetween(dataCopy, tags[taglen - 2], tags[taglen - 1]);
+
+            if(text != ""){
+                tags.splice(tags.length - 1, 0, text);
+            }
+            dataCopy = dataCopy.substring(dataCopy.indexOf(tags[taglen - 2]) + tags[taglen - 2].length);
+        }
 
         data = data.substring(data.indexOf(element) + element.length);
     }
-    
-    /* Close self closing tags */
-    var len = stack.length;
-    var len2 = selfClose.length;
+
+    return tags;
+}
+
+function getTextBetween(data, first, last){
+    return data.split(first)[1].split(last)[0].trim();
+}
+
+function insertTabs(data){
     var i;
-    var j;
+    var len = data.length;
+    var index2;
     var elm;
-    var re;
-    var find;
+    var j;
+    var temp;
 
     for(i = 0; i < len; i++){
-        elm = stack[i];
-        find = null;
+        elm = data[i];
 
-        for(j = 0; j < len2; j++){
-            re = new RegExp("<" + selfClose[j]);
-            find = elm.toLowerCase().match(re);
+        if(elm.match(/<[^/][^<>]*>/) != null){
+            temp = elm.indexOf("<") + 1;
 
-            if(find != null){
-                find = find[0];
-                break;
+            if(elm.split(" ").length > 1){
+                temp = elm.split(" ")[0].slice(0, temp) + "/" + elm.split(" ")[0].slice(temp) + ">";
+            } else {
+                temp = elm.slice(0, temp) + "/" + elm.slice(temp);
             }
-        }
+            
+            index2 = data.indexOf(temp, i);
 
-        if(find != null){
-            stack.splice(i + 1, 0, "</" + selfClose[j] + ">");
+            for(j = i + 1; j < index2; j++){
+                data[j] = "\t" + data[j];
+            }
         }
     }
 
-    len = stack.length;
-    var parseStack = [];
-    var insert = "";
-    var finalString = "";
-
-    i = 0;
-    j = 0;
-    var k;
-
-    for(i = 0; i < len; i++){
-        parseStack.push(stack[i]);
-        j = parseStack.length - 1;
-        elm = parseStack[j];
-
-        if(stack[i].replace(/<\/[^<>]*>/,"") == ""){
-            j = j - 1;
-        }
-
-        if(!selfClose.includes(elm.replace(/[\/<>]/g,"")) || selfClose.includes(elm.replace(/[<>]/g,""))){
-            insert = "";
-            for(k = 0; k < j; k++){
-                insert += "\t";
-            }
-            finalString += insert + elm + "\n";
-        }
-
-        if(stack[i].replace(/<\/[^<>]*>/,"") == ""){
-            parseStack.pop();
-            parseStack.pop();
-        } 
-    }
-
-    console.log(out);
-    console.log(finalString);
+    return data;
 }
