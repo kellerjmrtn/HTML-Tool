@@ -1,4 +1,5 @@
 var fs = require("fs");
+var start = Date.now();
 
 var out;
 fs.readFile("input.html", "utf8", function(err, data){
@@ -7,6 +8,9 @@ fs.readFile("input.html", "utf8", function(err, data){
     fs.writeFile("out.html", out, function(err){
         console.log("write success!");
     });
+    
+    var delta = Date.now() - start;
+    console.log("Elapsed time: " + delta + " ms");
 });
 
 function read(err, data){
