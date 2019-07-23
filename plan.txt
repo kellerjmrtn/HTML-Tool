@@ -1,0 +1,9 @@
+1) Convert to TypeScript
+2) Create tag Object for each Tag
+3) Create node object for each Node... (has tag-start and tag-end objects attached?)
+
+This allows looping through nodes and indenting all children
+
+4) Add support for CSS indenting
+5) Javascript indenting?
+	- Will need many more nodes for this
