@@ -1,0 +1,30 @@
+{
+  "name": "html-tool",
+  "version": "1.0.0",
+  "description": "HTML-Tool",
+  "main": "parse.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kellerjmrtn/HTML-Tool.git"
+  },
+  "keywords": [
+    "HTML",
+    "Parse",
+    "tab"
+  ],
+  "author": "Keller Martin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kellerjmrtn/HTML-Tool/issues"
+  },
+  "homepage": "https://github.com/kellerjmrtn/HTML-Tool#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^12.6.8",
+    "typescript": "^3.5.3"
+  }
+}
