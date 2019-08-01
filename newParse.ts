@@ -1,21 +1,54 @@
 var fs = require("fs");
-
-fs.readFile("input.html", "utf8", function(err, data) {
-    console.log(data);
-})
+var out : string;
 
 class Attribute {
-    property: String;
-    value: String;
+    property: string;
+    value: string;
 }
 
 class TagNode {
-    type: String;
+    type: string;
     attributes: Attribute[];
-    openTag: String;
+    openTag: string;
 }
 
-var tag = new TagNode();
-tag.type = "div";
+class MiniDOM {
+    nodes: TagNode[];
+    language: string;
+    
+    private static Lexer = class {
+        rawData: string;
 
-console.log(tag);
+        getNode(): TagNode {
+
+
+            return null;
+        }
+    }
+
+    constructor(rawData: string, language?: string){
+        if(language != undefined){
+            this.language = language;
+        } else {
+            this.language = this.findOpeningDescriptor();
+            // parse first node for language
+            // if none found, try to guess language
+        }
+    }
+
+    findOpeningDescriptor() : string {
+        return null;
+    }
+}
+
+fs.readFile("input.html", "utf8", function(err: any, data: string) {
+    out = main(err, data);
+});
+
+function main(err: any, data: string) : string{
+    if(err) throw err;
+
+    var miniDOM = new MiniDOM(data);
+
+    return null;
+}
