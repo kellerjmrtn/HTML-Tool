@@ -7,3 +7,9 @@ This allows looping through nodes and indenting all children
 4) Add support for CSS indenting
 5) Javascript indenting?
 	- Will need many more nodes for this
+
+
+
+Other Stuff
+ - Amazon.com web scraper
+ - Minecraft mod?
