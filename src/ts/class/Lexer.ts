@@ -10,7 +10,7 @@ export class Lexer {
     }
 
     getDescriptorTag(): TagNode {
-        let descriptorText = this.rawData.match(/<!.+?>/)[0];
+        let descriptorText = this.rawData.match(/<.+?>/)[0];
 
         let descriptorNode = new TagNode(descriptorText);
         return descriptorNode;
@@ -21,13 +21,24 @@ export class Lexer {
     }
 
     private findLanguage(): string {
-        let openTag = this.getDescriptorTag().getOpenTag();
-        let lang = openTag.slice(2, openTag.length - 1);
+        let openTag = this.getDescriptorTag();
 
-        if(lang.split(" ").length > 1){
-            return lang.split(" ")[1];
+        if(openTag.getOpenTagText().toUpperCase().includes("!DOCTYPE")){
+            let allAttr = openTag.getAttributes();
+
+            for(let i = 0; i < allAttr.length; i++){
+                if(allAttr[i].getProperty().toUpperCase() == "HTML"){
+                    return "html";
+                }
+            }
+
+            return "unsupported";
+        } else if(openTag.getOpenTagText().toUpperCase().includes("?XML")){
+            return "xml";
         } else {
             return null;
         }
+
+        // Guess language?
     }
 }
