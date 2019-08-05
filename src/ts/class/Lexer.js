@@ -31,13 +31,7 @@ var Lexer = /** @class */ (function () {
         else {
             return null;
         }
-        /*let lang = openTag.slice(2, openTag.length - 1);
-
-        if(lang.split(" ").length > 1){
-            return lang.split(" ")[1];
-        } else {
-            return null;
-        }*/
+        // Guess language?
     };
     return Lexer;
 }());

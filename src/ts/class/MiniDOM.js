@@ -16,6 +16,8 @@ var MiniDOM = /** @class */ (function () {
     MiniDOM.prototype.getLanguage = function () {
         return this.language;
     };
+    MiniDOM.prototype.findNodes = function () {
+    };
     return MiniDOM;
 }());
 exports.MiniDOM = MiniDOM;

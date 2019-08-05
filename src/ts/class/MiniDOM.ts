@@ -21,4 +21,8 @@ export class MiniDOM {
     public getLanguage(): string {
         return this.language;
     }
+
+    public buildDOM(): void {
+
+    }
 }

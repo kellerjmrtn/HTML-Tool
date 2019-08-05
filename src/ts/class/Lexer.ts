@@ -3,10 +3,12 @@ import { TagNode } from "./TagNode";
 export class Lexer {
     private rawData: string;
     private language: string;
+    private formatData: string;
 
     constructor(rawData: string){
         this.rawData = rawData;
         this.language = this.findLanguage();
+        this.formatData = rawData.replace(/(\r)/g, "").replace(/(\n)/g, " ").replace(/<!--.*?-->/g, "");
     }
 
     getDescriptorTag(): TagNode {
@@ -40,5 +42,15 @@ export class Lexer {
         }
 
         // Guess language?
+    }
+
+    public findAllTags(): TagNode[] {
+        let allTags: TagNode[] = [];
+        let currentIndex: number = 0;
+
+        while(true){
+            
+        }
+        return null;
     }
 }
