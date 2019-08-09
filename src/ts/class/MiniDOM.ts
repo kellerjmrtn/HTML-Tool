@@ -2,9 +2,9 @@ import { TagNode } from "./TagNode";
 import { Lexer } from "./Lexer";
 
 export class MiniDOM {
-    nodes: TagNode[];
-    language: string;
-    lex: Lexer;
+    private nodes: TagNode[];
+    private language: string;
+    private lex: Lexer;
 
     constructor(rawData: string, language?: string){
         this.lex = new Lexer(rawData);
@@ -22,7 +22,11 @@ export class MiniDOM {
         return this.language;
     }
 
-    public buildDOM(): void {
+    public getNodes(): TagNode[] {
+        return this.nodes;
+    }
 
+    public buildDOM(): void {
+        this.nodes = this.lex.findAllTags();
     }
 }

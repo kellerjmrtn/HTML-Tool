@@ -4,11 +4,13 @@ export class Lexer {
     private rawData: string;
     private language: string;
     private formatData: string;
+    private currentIndex: number;
 
     constructor(rawData: string){
         this.rawData = rawData;
         this.language = this.findLanguage();
         this.formatData = rawData.replace(/(\r)/g, "").replace(/(\n)/g, " ").replace(/<!--.*?-->/g, "");
+        this.currentIndex = 0;
     }
 
     getDescriptorTag(): TagNode {
@@ -44,13 +46,45 @@ export class Lexer {
         // Guess language?
     }
 
+    private findNextTag(): TagNode {
+        let len: number = this.formatData.length;
+        let tagStart: number = this.currentIndex;
+        let inDoubleQuotes = false;
+        let inSingleQuotes = false;
+        let inTag = false;
+
+        for(let i = this.currentIndex; i < len; i++){
+            let charAt = this.formatData.charAt(i);
+
+            if(charAt == "<" && inDoubleQuotes == false && inSingleQuotes == false && inTag == false){
+                inTag = true;
+                tagStart = i;
+            } else if(charAt == ">" && inDoubleQuotes == false && inSingleQuotes == false && inTag == true){
+                this.currentIndex = i + 1;
+                return new TagNode(this.formatData.slice(tagStart, i + 1));
+            } else if(charAt == '"' && inSingleQuotes == false && inTag == true){
+                inDoubleQuotes = !inDoubleQuotes;
+            } else if(charAt == "'" && inDoubleQuotes == false && inTag == true){
+                inSingleQuotes = !inSingleQuotes;
+            }
+        }
+
+        return null;
+    }
+
     public findAllTags(): TagNode[] {
         let allTags: TagNode[] = [];
-        let currentIndex: number = 0;
 
         while(true){
-            
+            let tag = this.findNextTag();
+
+            if(tag != null){
+                allTags.push(tag);
+            } else {
+                break;
+            }
         }
-        return null;
+
+        return allTags;
     }
 }

@@ -13,6 +13,9 @@ function main(err, data) {
     if (err)
         throw err;
     var miniDOM = new MiniDOM_1.MiniDOM(data);
+    miniDOM.buildDOM();
     console.log(miniDOM.getLanguage());
+    var allNodes = miniDOM.getNodes();
+    console.log(allNodes);
     return null;
 }

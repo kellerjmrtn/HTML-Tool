@@ -16,7 +16,11 @@ var MiniDOM = /** @class */ (function () {
     MiniDOM.prototype.getLanguage = function () {
         return this.language;
     };
-    MiniDOM.prototype.findNodes = function () {
+    MiniDOM.prototype.getNodes = function () {
+        return this.nodes;
+    };
+    MiniDOM.prototype.buildDOM = function () {
+        this.nodes = this.lex.findAllTags();
     };
     return MiniDOM;
 }());

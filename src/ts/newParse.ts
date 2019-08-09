@@ -15,7 +15,11 @@ function main(err: any, data: string) : string{
     if(err) throw err;
 
     let miniDOM = new MiniDOM(data);
+    miniDOM.buildDOM();
     console.log(miniDOM.getLanguage());
+    let allNodes = miniDOM.getNodes();
+
+    console.log(allNodes);
 
     return null;
 }
