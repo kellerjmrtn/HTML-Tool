@@ -27,7 +27,7 @@ export class Lexer {
     private findLanguage(): string {
         let openTag = this.getDescriptorTag();
 
-        if(openTag.getOpenTagText().toUpperCase().includes("!DOCTYPE")){
+        if(openTag.getFormatTagText().toUpperCase().includes("!DOCTYPE")){
             let allAttr = openTag.getAttributes();
 
             for(let i = 0; i < allAttr.length; i++){
@@ -37,7 +37,7 @@ export class Lexer {
             }
 
             return "unsupported";
-        } else if(openTag.getOpenTagText().toUpperCase().includes("?XML")){
+        } else if(openTag.getFormatTagText().toUpperCase().includes("?XML")){
             return "xml";
         } else {
             return null;

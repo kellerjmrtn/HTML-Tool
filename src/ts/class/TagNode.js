@@ -3,14 +3,13 @@ exports.__esModule = true;
 var Attribute_1 = require("./Attribute");
 var TagNode = /** @class */ (function () {
     function TagNode(tagText) {
-        // Set openTag
+        this.tagText = tagText;
         if (tagText[1] == "/") {
-            this.openTag = "";
-            this.closeTag = tagText;
+            this.openTag = false;
+            this.selfClose = false;
         }
         else {
-            this.openTag = tagText;
-            this.closeTag = "";
+            this.openTag = true;
         }
         // find tag name
         this.type = this.findTagName();
@@ -19,10 +18,10 @@ var TagNode = /** @class */ (function () {
         this.attributes = this.findAllAttributes();
     }
     TagNode.prototype.findTagName = function () {
-        return this.getOpenTagText().split(" ")[0];
+        return this.getFormatTagText().split(" ")[0];
     };
     TagNode.prototype.findNextAttribute = function () {
-        var tagString = this.getOpenTagText().trim();
+        var tagString = this.getFormatTagText().trim();
         var len = tagString.length;
         var attrStart = TagNode.currentIndex;
         var valStart = attrStart;
@@ -102,11 +101,11 @@ var TagNode = /** @class */ (function () {
         }
         return allAttr;
     };
-    TagNode.prototype.getOpenTag = function () {
-        return this.openTag;
+    TagNode.prototype.getTagText = function () {
+        return this.tagText;
     };
-    TagNode.prototype.getOpenTagText = function () {
-        return this.openTag.replace(/^</g, "").replace(/>$/g, "");
+    TagNode.prototype.getFormatTagText = function () {
+        return this.tagText.replace(/^</g, "").replace(/>$/g, "");
     };
     TagNode.prototype.getAttributes = function () {
         return this.attributes;

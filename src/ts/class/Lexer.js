@@ -18,7 +18,7 @@ var Lexer = /** @class */ (function () {
     };
     Lexer.prototype.findLanguage = function () {
         var openTag = this.getDescriptorTag();
-        if (openTag.getOpenTagText().toUpperCase().includes("!DOCTYPE")) {
+        if (openTag.getFormatTagText().toUpperCase().includes("!DOCTYPE")) {
             var allAttr = openTag.getAttributes();
             for (var i = 0; i < allAttr.length; i++) {
                 if (allAttr[i].getProperty().toUpperCase() == "HTML") {
@@ -27,7 +27,7 @@ var Lexer = /** @class */ (function () {
             }
             return "unsupported";
         }
-        else if (openTag.getOpenTagText().toUpperCase().includes("?XML")) {
+        else if (openTag.getFormatTagText().toUpperCase().includes("?XML")) {
             return "xml";
         }
         else {

@@ -3,19 +3,20 @@ import { Attribute } from "./Attribute";
 export class TagNode {
     type: string;
     attributes: Attribute[];
-    openTag: string;
-    closeTag: string;
+    tagText: string;
+    openTag: boolean;
+    selfClose: boolean;
 
     static currentIndex: number;
 
     constructor(tagText: string){
-        // Set openTag
+        this.tagText = tagText;
+
         if(tagText[1] == "/"){
-            this.openTag = "";
-            this.closeTag = tagText;
+            this.openTag = false;
+            this.selfClose = false;
         } else {
-            this.openTag = tagText;
-            this.closeTag = "";
+            this.openTag = true;
         }
 
         // find tag name
@@ -28,11 +29,11 @@ export class TagNode {
     }
 
     private findTagName(): string {
-        return this.getOpenTagText().split(" ")[0];
+        return this.getFormatTagText().split(" ")[0];
     }
 
     private findNextAttribute(): Attribute {
-        let tagString = this.getOpenTagText().trim();
+        let tagString = this.getFormatTagText().trim();
         let len = tagString.length;
         let attrStart = TagNode.currentIndex;
         let valStart = attrStart;
@@ -116,12 +117,12 @@ export class TagNode {
         return allAttr;
     }
 
-    public getOpenTag(): string {
-        return this.openTag;
+    public getTagText(): string {
+        return this.tagText;
     }
 
-    public getOpenTagText(): string {
-        return this.openTag.replace(/^</g, "").replace(/>$/g, "");
+    public getFormatTagText(): string {
+        return this.tagText.replace(/^</g, "").replace(/>$/g, "");
     }
 
     public getAttributes(): Attribute[] {
