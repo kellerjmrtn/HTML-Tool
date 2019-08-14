@@ -22,6 +22,17 @@ var MiniDOM = /** @class */ (function () {
     MiniDOM.prototype.buildDOM = function () {
         this.nodes = this.lex.findAllTags();
     };
+    MiniDOM.prototype.toString = function () {
+        var outString = "";
+        // meta-data
+        outString += "<!---  META-DATA:";
+        outString += "\nLanugage: " + this.language;
+        outString += "  --->\n\n<!----------- DOCUMENT START ----------->\n\n";
+        for (var i = 0; i < this.nodes.length; i++) {
+            outString += this.nodes[i].toString(0);
+        }
+        return outString;
+    };
     return MiniDOM;
 }());
 exports.MiniDOM = MiniDOM;

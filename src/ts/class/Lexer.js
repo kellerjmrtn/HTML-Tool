@@ -25,17 +25,17 @@ var Lexer = /** @class */ (function () {
                     return "html";
                 }
             }
-            return "unsupported";
+            return "unsupported DOCTYPE";
         }
         else if (openTag.getFormatTagText().toUpperCase().includes("?XML")) {
             return "xml";
         }
         else {
-            return null;
+            return "unknown language";
         }
         // Guess language?
     };
-    Lexer.prototype.findNextTag = function () {
+    Lexer.prototype.findNextTag = function (parent, depth) {
         var len = this.formatData.length;
         var tagStart = this.currentIndex;
         var inDoubleQuotes = false;
@@ -49,7 +49,47 @@ var Lexer = /** @class */ (function () {
             }
             else if (charAt == ">" && inDoubleQuotes == false && inSingleQuotes == false && inTag == true) {
                 this.currentIndex = i + 1;
-                return new TagNode_1.TagNode(this.formatData.slice(tagStart, i + 1));
+                var tag = new TagNode_1.TagNode(this.formatData.slice(tagStart, i + 1));
+                tag.setParent(parent);
+                tag.setDepth(depth);
+                if (tag.isOpenTag()) {
+                    var nextTag = this.findNextTag(tag, depth + 1);
+                    console.log("tag: " + tag.getTagText());
+                    console.log("nextTag: " + nextTag.getTagText());
+                    console.log(nextTag.getType() == tag.getType() && nextTag.isOpenTag() == false);
+                    if (nextTag.getType() == tag.getType() && nextTag.isOpenTag() == false) {
+                        parent.addChild(nextTag);
+                        nextTag.setParent(parent);
+                        nextTag.setDepth(depth);
+                    }
+                    else {
+                        tag.addChild(nextTag);
+                    }
+                }
+                /*if(parent.getType() == tag.getType() && tag.isOpenTag() == false){
+                    console.log(parent.getTagText());
+                    tag.setParent(parent);
+                    return null;
+                } else {
+                    tag.setParent(parent);
+                    tag.addChild(this.findNextTag(tag));
+                    let newChild: TagNode;
+                    while(true){
+                        newChild = this.findNextTag(tag);
+
+                        if(newChild != null){
+                            if(newChild.isOpenTag()){
+                                tag.addChild(newChild);
+                            } else {
+                                tag.addChild(newChild);
+                                return null;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                }*/
+                return tag;
             }
             else if (charAt == '"' && inSingleQuotes == false && inTag == true) {
                 inDoubleQuotes = !inDoubleQuotes;
@@ -62,8 +102,9 @@ var Lexer = /** @class */ (function () {
     };
     Lexer.prototype.findAllTags = function () {
         var allTags = [];
+        var tagDoc = new TagNode_1.TagNode("<document>");
         while (true) {
-            var tag = this.findNextTag();
+            var tag = this.findNextTag(tagDoc, 0);
             if (tag != null) {
                 allTags.push(tag);
             }

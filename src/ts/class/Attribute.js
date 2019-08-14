@@ -11,6 +11,9 @@ var Attribute = /** @class */ (function () {
     Attribute.prototype.getValue = function () {
         return this.value;
     };
+    Attribute.prototype.toString = function () {
+        return this.property + ": " + this.value;
+    };
     return Attribute;
 }());
 exports.Attribute = Attribute;

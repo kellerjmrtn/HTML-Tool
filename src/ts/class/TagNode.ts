@@ -6,11 +6,17 @@ export class TagNode {
     tagText: string;
     openTag: boolean;
     selfClose: boolean;
+    children: TagNode[];
+    parent: TagNode;
+    depth: number;
 
     static currentIndex: number;
 
     constructor(tagText: string){
         this.tagText = tagText;
+        this.children = [];
+        this.parent = null;
+        this.depth = 0;
 
         if(tagText[1] == "/"){
             this.openTag = false;
@@ -29,7 +35,7 @@ export class TagNode {
     }
 
     private findTagName(): string {
-        return this.getFormatTagText().split(" ")[0];
+        return this.getFormatTagText().split(" ")[0].replace("/", "");
     }
 
     private findNextAttribute(): Attribute {
@@ -61,7 +67,7 @@ export class TagNode {
 
                                 if(!nextEquals.includes("=")){
                                     TagNode.currentIndex = i;
-                                    return new Attribute(tagString.slice(attrStart, i), "");
+                                    return new Attribute(tagString.slice(attrStart, i), '"' + tagString.slice(attrStart, i) + '"');
                                 }
                             } 
                         } else {
@@ -93,7 +99,7 @@ export class TagNode {
             
             if(i == len - 1 && inAttr){
                 TagNode.currentIndex = i + 1;
-                return new Attribute(tagString.slice(attrStart, i + 1), "");
+                return new Attribute(tagString.slice(attrStart, i + 1), '"' + tagString.slice(attrStart, i + 1) + '"');
             }
         }
 
@@ -127,5 +133,78 @@ export class TagNode {
 
     public getAttributes(): Attribute[] {
         return this.attributes;
+    }
+
+    public getChildren(): TagNode[] {
+        return this.children;
+    }
+
+    public addChild(child: TagNode): void {
+        if(child != null){
+            this.children.push(child);
+        }
+    }
+
+    public getParent(): TagNode {
+        return this.parent;
+    }
+
+    public setParent(parent: TagNode): void {
+        this.parent = parent;
+    }
+
+    public getType(): string {
+        return this.type;
+    }
+
+    public setType(type: string): void {
+        this.type = type;
+    }
+
+    public isOpenTag(): boolean {
+        return this.openTag;
+    }
+
+    public setOpenTag(openTag: boolean): void {
+        this.openTag = openTag;
+    }
+
+    public getDepth(): number {
+        return this.depth;
+    }
+
+    public setDepth(depth: number): void {
+        this.depth = depth;
+    }
+
+    public toString(tabs: number): string {
+        let outString: string = "";
+        let tabString: string = "";
+
+        for(let i = 0; i < tabs; i++){
+            tabString += "\t";
+        }
+
+        outString += this.tagText + "\n";
+
+        //META-DATA
+        outString += tabString + "<!--- META-DATA:";
+        if(this.parent != null){
+            outString += "\n" + tabString + "parent: " + this.parent.getType();
+        }
+        
+        if(this.openTag == true){
+            for(let i = 0; i < this.attributes.length; i++){
+                outString += "\n" + tabString + this.attributes[i].toString();
+            }
+        }
+
+        outString += "  --->\n\n";
+
+        for(let i = 0; i < this.children.length; i++){
+            outString += tabString + this.children[i].toString(tabs + 1) + "\n";
+        }
+
+        return outString;
     }
 }

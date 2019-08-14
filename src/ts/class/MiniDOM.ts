@@ -29,4 +29,20 @@ export class MiniDOM {
     public buildDOM(): void {
         this.nodes = this.lex.findAllTags();
     }
+
+    public toString(): string {
+        let outString: string = "";
+
+        // meta-data
+        outString += "<!---  META-DATA:";
+        outString += "\nLanugage: " + this.language;
+
+        outString += "  --->\n\n<!----------- DOCUMENT START ----------->\n\n";
+
+        for(let i = 0; i < this.nodes.length; i++){
+            outString += this.nodes[i].toString(0);
+        }
+
+        return outString;
+    }
 }
