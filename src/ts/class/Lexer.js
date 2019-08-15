@@ -54,16 +54,18 @@ var Lexer = /** @class */ (function () {
                 tag.setDepth(depth);
                 if (tag.isOpenTag()) {
                     var nextTag = this.findNextTag(tag, depth + 1);
-                    console.log("tag: " + tag.getTagText());
-                    console.log("nextTag: " + nextTag.getTagText());
-                    console.log(nextTag.getType() == tag.getType() && nextTag.isOpenTag() == false);
-                    if (nextTag.getType() == tag.getType() && nextTag.isOpenTag() == false) {
-                        parent.addChild(nextTag);
-                        nextTag.setParent(parent);
-                        nextTag.setDepth(depth);
-                    }
-                    else {
-                        tag.addChild(nextTag);
+                    if (nextTag != null) {
+                        console.log("tag: " + tag.getTagText());
+                        console.log("nextTag: " + nextTag.getTagText());
+                        console.log(nextTag.getType() == tag.getType() && nextTag.isOpenTag() == false);
+                        if (nextTag.getType() == tag.getType() && nextTag.isOpenTag() == false) {
+                            parent.addChild(nextTag);
+                            nextTag.setParent(parent);
+                            nextTag.setDepth(depth);
+                        }
+                        else {
+                            tag.addChild(nextTag);
+                        }
                     }
                 }
                 /*if(parent.getType() == tag.getType() && tag.isOpenTag() == false){

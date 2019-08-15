@@ -13,3 +13,4 @@ This allows looping through nodes and indenting all children
 Other Stuff
  - Amazon.com web scraper
  - Minecraft mod?
+ - SUPERzoom extension

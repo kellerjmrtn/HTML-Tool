@@ -67,15 +67,18 @@ export class Lexer {
 
                 if(tag.isOpenTag()){
                     let nextTag = this.findNextTag(tag, depth + 1);
-                    console.log("tag: " + tag.getTagText());
-                    console.log("nextTag: " + nextTag.getTagText())
-                    console.log(nextTag.getType() == tag.getType() && nextTag.isOpenTag() == false);
-                    if(nextTag.getType() == tag.getType() && nextTag.isOpenTag() == false){
-                        parent.addChild(nextTag);
-                        nextTag.setParent(parent);
-                        nextTag.setDepth(depth);
-                    } else {
-                        tag.addChild(nextTag);
+
+                    if(nextTag != null){
+                        console.log("tag: " + tag.getTagText());
+                        console.log("nextTag: " + nextTag.getTagText())
+                        console.log(nextTag.getType() == tag.getType() && nextTag.isOpenTag() == false);
+                        if(nextTag.getType() == tag.getType() && nextTag.isOpenTag() == false){
+                            parent.addChild(nextTag);
+                            nextTag.setParent(parent);
+                            nextTag.setDepth(depth);
+                        } else {
+                            tag.addChild(nextTag);
+                        }
                     }
                 }
 
