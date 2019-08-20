@@ -17,3 +17,5 @@ s = s.split(",");
 
 console.log(s);
 console.log(struct);
+
+console.log("fld_os_squareFootage_1".match(/(?:_)([0-9]+)$/));
