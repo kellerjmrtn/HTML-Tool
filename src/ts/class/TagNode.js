@@ -4,6 +4,7 @@ var Attribute_1 = require("./Attribute");
 var TagNode = /** @class */ (function () {
     function TagNode(tagText) {
         this.tagText = tagText;
+        this.children = [];
         if (tagText[1] == "/") {
             this.openTag = false;
             this.selfClose = false;
@@ -109,6 +110,18 @@ var TagNode = /** @class */ (function () {
     };
     TagNode.prototype.getAttributes = function () {
         return this.attributes;
+    };
+    TagNode.prototype.getChildren = function () {
+        return this.children;
+    };
+    TagNode.prototype.setChildren = function (children) {
+        this.children = children;
+    };
+    TagNode.prototype.addChild = function (child) {
+        this.children.push(child);
+    };
+    TagNode.prototype.isOpenTag = function () {
+        return this.openTag;
     };
     return TagNode;
 }());

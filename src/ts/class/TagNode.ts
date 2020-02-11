@@ -6,11 +6,13 @@ export class TagNode {
     tagText: string;
     openTag: boolean;
     selfClose: boolean;
+    children: TagNode[];
 
     static currentIndex: number;
 
     constructor(tagText: string){
         this.tagText = tagText;
+        this.children = [];
 
         if(tagText[1] == "/"){
             this.openTag = false;
@@ -127,5 +129,21 @@ export class TagNode {
 
     public getAttributes(): Attribute[] {
         return this.attributes;
+    }
+
+    public getChildren(): TagNode[] {
+        return this.children;
+    }
+
+    public setChildren(children: TagNode[]): void {
+        this.children = children;
+    }
+
+    public addChild(child: TagNode): void {
+        this.children.push(child);
+    }
+
+    public isOpenTag(): boolean {
+        return this.openTag;
     }
 }

@@ -41,6 +41,7 @@ var Lexer = /** @class */ (function () {
         var inDoubleQuotes = false;
         var inSingleQuotes = false;
         var inTag = false;
+        var currentTag;
         for (var i = this.currentIndex; i < len; i++) {
             var charAt = this.formatData.charAt(i);
             if (charAt == "<" && inDoubleQuotes == false && inSingleQuotes == false && inTag == false) {
@@ -49,7 +50,14 @@ var Lexer = /** @class */ (function () {
             }
             else if (charAt == ">" && inDoubleQuotes == false && inSingleQuotes == false && inTag == true) {
                 this.currentIndex = i + 1;
-                return new TagNode_1.TagNode(this.formatData.slice(tagStart, i + 1));
+                currentTag = new TagNode_1.TagNode(this.formatData.slice(tagStart, i + 1));
+                if (currentTag.isOpenTag()) {
+                    currentTag.addChild(this.findNextTag());
+                    return currentTag;
+                }
+                else {
+                    return null;
+                }
             }
             else if (charAt == '"' && inSingleQuotes == false && inTag == true) {
                 inDoubleQuotes = !inDoubleQuotes;
@@ -64,6 +72,8 @@ var Lexer = /** @class */ (function () {
         var allTags = [];
         while (true) {
             var tag = this.findNextTag();
+            console.log(tag);
+            console.log("huh");
             if (tag != null) {
                 allTags.push(tag);
             }

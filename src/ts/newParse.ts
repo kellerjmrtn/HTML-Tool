@@ -19,7 +19,7 @@ function main(err: any, data: string) : string{
     console.log(miniDOM.getLanguage());
     let allNodes = miniDOM.getNodes();
 
-    console.log(allNodes);
+    console.log(allNodes[0].getChildren()[0].getChildren()[0]);
 
     return null;
 }

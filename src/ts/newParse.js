@@ -4,7 +4,7 @@ var MiniDOM_1 = require("./class/MiniDOM");
 var fs = require("fs");
 var out;
 var start = Date.now();
-fs.readFile("input.html", "utf8", function (err, data) {
+fs.readFile("../../input.html", "utf8", function (err, data) {
     out = main(err, data);
     var delta = Date.now() - start;
     console.log("Elapsed time: " + delta + " ms");
@@ -16,6 +16,6 @@ function main(err, data) {
     miniDOM.buildDOM();
     console.log(miniDOM.getLanguage());
     var allNodes = miniDOM.getNodes();
-    console.log(allNodes);
+    console.log(allNodes[0].getChildren()[0].getChildren()[0]);
     return null;
 }
