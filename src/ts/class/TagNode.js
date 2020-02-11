@@ -5,6 +5,11 @@ var TagNode = /** @class */ (function () {
     function TagNode(tagText) {
         this.tagText = tagText;
         this.children = [];
+<<<<<<< HEAD
+=======
+        this.parent = null;
+        this.depth = 0;
+>>>>>>> 41c24b7eab3facb8fde860a12aed030c21024792
         if (tagText[1] == "/") {
             this.openTag = false;
             this.selfClose = false;
@@ -19,7 +24,7 @@ var TagNode = /** @class */ (function () {
         this.attributes = this.findAllAttributes();
     }
     TagNode.prototype.findTagName = function () {
-        return this.getFormatTagText().split(" ")[0];
+        return this.getFormatTagText().split(" ")[0].replace("/", "");
     };
     TagNode.prototype.findNextAttribute = function () {
         var tagString = this.getFormatTagText().trim();
@@ -46,7 +51,7 @@ var TagNode = /** @class */ (function () {
                                 nextEquals = nextEqualsMatch[0];
                                 if (!nextEquals.includes("=")) {
                                     TagNode.currentIndex = i;
-                                    return new Attribute_1.Attribute(tagString.slice(attrStart, i), "");
+                                    return new Attribute_1.Attribute(tagString.slice(attrStart, i), '"' + tagString.slice(attrStart, i) + '"');
                                 }
                             }
                         }
@@ -83,7 +88,7 @@ var TagNode = /** @class */ (function () {
             }
             if (i == len - 1 && inAttr) {
                 TagNode.currentIndex = i + 1;
-                return new Attribute_1.Attribute(tagString.slice(attrStart, i + 1), "");
+                return new Attribute_1.Attribute(tagString.slice(attrStart, i + 1), '"' + tagString.slice(attrStart, i + 1) + '"');
             }
         }
         return null;
@@ -114,15 +119,69 @@ var TagNode = /** @class */ (function () {
     TagNode.prototype.getChildren = function () {
         return this.children;
     };
+<<<<<<< HEAD
     TagNode.prototype.setChildren = function (children) {
         this.children = children;
     };
     TagNode.prototype.addChild = function (child) {
         this.children.push(child);
+=======
+    TagNode.prototype.addChild = function (child) {
+        if (child != null) {
+            this.children.push(child);
+        }
+    };
+    TagNode.prototype.getParent = function () {
+        return this.parent;
+    };
+    TagNode.prototype.setParent = function (parent) {
+        this.parent = parent;
+    };
+    TagNode.prototype.getType = function () {
+        return this.type;
+    };
+    TagNode.prototype.setType = function (type) {
+        this.type = type;
+>>>>>>> 41c24b7eab3facb8fde860a12aed030c21024792
     };
     TagNode.prototype.isOpenTag = function () {
         return this.openTag;
     };
+<<<<<<< HEAD
+=======
+    TagNode.prototype.setOpenTag = function (openTag) {
+        this.openTag = openTag;
+    };
+    TagNode.prototype.getDepth = function () {
+        return this.depth;
+    };
+    TagNode.prototype.setDepth = function (depth) {
+        this.depth = depth;
+    };
+    TagNode.prototype.toString = function (tabs) {
+        var outString = "";
+        var tabString = "";
+        for (var i = 0; i < tabs; i++) {
+            tabString += "\t";
+        }
+        outString += this.tagText + "\n";
+        //META-DATA
+        outString += tabString + "<!--- META-DATA:";
+        if (this.parent != null) {
+            outString += "\n" + tabString + "parent: " + this.parent.getType();
+        }
+        if (this.openTag == true) {
+            for (var i = 0; i < this.attributes.length; i++) {
+                outString += "\n" + tabString + this.attributes[i].toString();
+            }
+        }
+        outString += "  --->\n\n";
+        for (var i = 0; i < this.children.length; i++) {
+            outString += tabString + this.children[i].toString(tabs + 1) + "\n";
+        }
+        return outString;
+    };
+>>>>>>> 41c24b7eab3facb8fde860a12aed030c21024792
     return TagNode;
 }());
 exports.TagNode = TagNode;

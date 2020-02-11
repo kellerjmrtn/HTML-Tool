@@ -7,8 +7,12 @@ let start = Date.now();
 fs.readFile("input.html", "utf8", function(err: any, data: string) {
     out = main(err, data);
 
-    let delta = Date.now() - start;
-    console.log("Elapsed time: " + delta + " ms");
+    fs.writeFile("out.html", out, function(err){
+        console.log("write success!");
+
+        let delta = Date.now() - start;
+        console.log("Elapsed time: " + delta + " ms");
+    });
 });
 
 function main(err: any, data: string) : string{
@@ -16,10 +20,6 @@ function main(err: any, data: string) : string{
 
     let miniDOM = new MiniDOM(data);
     miniDOM.buildDOM();
-    console.log(miniDOM.getLanguage());
-    let allNodes = miniDOM.getNodes();
 
-    console.log(allNodes[0].getChildren()[0].getChildren()[0]);
-
-    return null;
+    return miniDOM.toString();
 }

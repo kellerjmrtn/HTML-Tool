@@ -14,4 +14,8 @@ export class Attribute {
     public getValue(): string {
         return this.value;
     }
+
+    public toString(): string {
+        return this.property + ": " + this.value;
+    }
 }
